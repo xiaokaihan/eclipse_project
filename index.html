@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Eclipse project by xiaokaihan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Eclipse project</h1>
+      <h2 class="project-tagline">eclipse中使用git的实践操作</h2>
+      <a href="https://github.com/xiaokaihan/eclipse_project" class="btn">View on GitHub</a>
+      <a href="https://github.com/xiaokaihan/eclipse_project/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/xiaokaihan/eclipse_project/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="eclipse_project" class="anchor" href="#eclipse_project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>eclipse_project</h1>
+
+<p>此项目为：eclipse上使用git的实践操作。具体操作会以blog的形式总结。</p>
+
+<p>环境： win7, JDK1.7，eclipse indigo, eclipse自带EGIT2.2+。</p>
+
+<h2>
+<a id="一-安装egit插件如需" class="anchor" href="#%E4%B8%80-%E5%AE%89%E8%A3%85egit%E6%8F%92%E4%BB%B6%E5%A6%82%E9%9C%80" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>一. 安装EGIT插件（如需）</h2>
+
+<pre><code>打开eclipse，点help-----install newsoftware，名字写EGit，链接地址：http://download.eclipse.org/egit/updates，安装完毕后重启Eclipse。
+</code></pre>
+
+<h2>
+<a id="二-配置eclipse" class="anchor" href="#%E4%BA%8C-%E9%85%8D%E7%BD%AEeclipse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>二. 配置eclipse</h2>
+
+<p>点击window---sharepreference---Team---Git----Configuration,在user settings栏目点击Enter Entry，添加user.name：user.xiao<strong><em>和user.email user.2316</em></strong>@qq.com.</p>
+
+<h2>
+<a id="三-关联eclipse和本地git-repository" class="anchor" href="#%E4%B8%89-%E5%85%B3%E8%81%94eclipse%E5%92%8C%E6%9C%AC%E5%9C%B0git-repository" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>三. 关联eclipse和本地Git Repository</h2>
+
+<p>① 用eclipse新建一个Java项目，在eclipse里右键点击项目---Team----share project, 点击create, 再browser选中已经建好的仓库地址（需要先建好一个本地仓库），然后name填写<strong><em>；
+   ② 完成第一步之后，可以看到eclipse里项目名变为：</em></strong>（项目名） NO HEAD，里面的文件都带有问号，表示文件处于untracked状态，还未提交。此时，原eclipse工作空间的项目文件不见了，而是转移到了Git 仓库里。</p>
+
+<h2>
+<a id="四-github中新建一个repository" class="anchor" href="#%E5%9B%9B-github%E4%B8%AD%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AArepository" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>四. github中新建一个repository</h2>
+
+<p>在github中新建一个repository，命名一般与本地仓库名一致（命名可以不一致）。</p>
+
+<h2>
+<a id="五-commit到本地仓库" class="anchor" href="#%E4%BA%94-commit%E5%88%B0%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>五. commit到本地仓库</h2>
+
+<p>右键点击eclipse项目Team--commit, 写上commit message, 然后commit, commit到本地git repository之后，项目名后的NO HEAD变为了master，表示本地有分支了。</p>
+
+<h2>
+<a id="六-pull操作重点" class="anchor" href="#%E5%85%AD-pull%E6%93%8D%E4%BD%9C%E9%87%8D%E7%82%B9" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>六. pull操作（重点）</h2>
+
+<pre><code>此时进行push操作，会出现一些错误（比如：master reject）。 这时应该先从执行一次pull操作（即把github上的仓库先pull到本地仓库中），然后再push。
+</code></pre>
+
+<p>当执行pull操作时，会出现配置错误，，这时可以操作，window---preference--team---git--configuration-------------Repository Settings， 点击open，需要修改config的配置:</p>
+
+<pre><code>[core]
+ repositoryformatversion = 0
+ filemode = false
+ bare = false
+ logallrefupdates = true
+ symlinks = false
+ ignorecase = true
+ hideDotFiles = dotGitOnly
+[remote "origin"]
+ url = git@github.com:yanzi1225627/TestHello_git.git 
+
+fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+ remote = origin
+ merge = refs/heads/master
+[user]
+ name = yanzi1225627
+ email = yanzi1225627@qq.com
+</code></pre>
+
+<p>noted： 那个url地址是你在github上建库的ssh地址。使用ssh地址时，需要在github中添加一个private key. （如果使用HTTPS URL,则不需要这一步）
+在eclipse中获得private key方法：  <em><strong><em>通过eclipse里的window → preference → general → network connection → SSH2 → Key Management → generate RSA Key... → apply → save private key...，然后保存添加到github上！</em></strong></em></p>
+
+<h2>
+<a id="七-push操作" class="anchor" href="#%E4%B8%83-push%E6%93%8D%E4%BD%9C" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>七. push操作</h2>
+
+<pre><code>push操作在pull操作之后，team---remote---push, 接着直接使用配置好的remote repository，再add Spec,选择要push的分支（一般就是refs/heads/master），建议不要勾选force update，直接就finish，等待push操作的完成。 查看github，验证是否push成功。
+</code></pre>
+
+<p>参考博文地址：<a href="http://blog.csdn.net/yanzi1225627/article/details/12885317/">eclipse配置git</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/xiaokaihan/eclipse_project">Eclipse project</a> is maintained by <a href="https://github.com/xiaokaihan">xiaokaihan</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
